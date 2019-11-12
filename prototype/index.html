@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thai Sign Language</title>
+    <link rel="shortcut icon" type="image/png" href="Images/TH-FLAG.png" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <div>
+        <!--Navigation bar-->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a class="navbar-brand" href="#">
+                <img src="Images/TH-FLAG.png" alt="logo" style="width:40px;">
+            </a>
+            <ul class="navbar-nav">
+                <li id="translateTab" class="nav-item">
+                    <a id="translate" class="nav-link" onclick="toggleContent('translatepage')">
+                        Translate
+                    </a>
+                </li>
+                <li id="trainingTab" class="nav-item">
+                    <a id="training" class="nav-link" onclick="toggleContent('trainingpage')">
+                        Training
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+
+        <!--Content-->
+        <div id="content">
+
+            <!--Translation Page-->
+            <center>
+                <div id="translatepage">
+                    <div id="videoholder">
+                        <video autoplay="true" id="videoDisplay"></video>
+                    </div>
+                    <div id="translationHolder">
+                        <div id="translatedCard">
+                        </div>
+                        <h3 id="translationText">Start Signing!</h3>
+                    </div>
+                </div>
+
+            </center>
+
+
+
+            <!--Training/Dev Page-->
+            <center>
+                <div id="trainingpage">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <center>
+                                <div id="trainedCardsHolder">
+                                </div>
+                                
+                            </center>
+                        </div>
+                        <div class="col-sm-4">
+                            <center>
+                                <div id="videoholder">
+                                    <video autoplay="true" id="video"></video>
+                                    <div id="trainingHolder">
+                                        <h5 id="add-gesture">Add Word</h5>
+                                        <form id="add-word" autocomplete="off">
+                                            <input type="text" id="new-word" placeholder="New Gesture Title">
+                                            <input type="submit" id="submit-word" value="Add Word &#9658;">
+                                        </form>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                        <div class="col-sm-4">
+                            <center>
+                                <div id="initialTrainingHolder">
+                                    
+                                    <button id="startButton" class="trainButton ">Start Gesture</button>
+                                    <button id="clear_startButton" class="clearButton">Clear</button>
+                                    <h3 id="counter_startButton" class="counter"></h3>
+
+                                    <button id="stopButton" class="trainButton ">Stop Gesture</button>
+                                    <button id="clear_stopButton" class="clearButton">Clear</button>
+                                    <h3 id="counter_stopButton" class="counter"></h3>
+                                    
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </center>
+
+
+        </div>
+        <script>
+            toggleContent("translatepage");
+            function toggleContent(n) {
+                if (n == "translatepage") {
+                    document.getElementById("translatepage").style.display = "block"
+                    document.getElementById("translateTab").style.backgroundColor = "grey"
+                    document.getElementById("trainingTab").style.backgroundColor = "#343a40"
+                    document.getElementById("trainingpage").style.display = "none"
+                }
+                if (n == "trainingpage") {
+                    document.getElementById("translatepage").style.display = "none"
+                    document.getElementById("translateTab").style.backgroundColor = "#343a40"
+                    document.getElementById("trainingTab").style.backgroundColor = "grey"
+                    document.getElementById("trainingpage").style.display = "block"
+                }
+            }
+        </script>
+
+    </div>
+
+</body>
+
+</html>
