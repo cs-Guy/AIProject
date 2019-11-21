@@ -32,6 +32,7 @@
   firebase.analytics();
   
   var db = firebase.database();
+  var wordsRef = db.ref().child("words");
   
   // Webcam Image size. Must be 227. 
   var IMAGE_SIZE = 227;
@@ -40,8 +41,9 @@
   
   var predictionThreshold = 0.98;
   
-  var words;
-  
+  var words = [];
+  ref.on('value',function(snap){words = snap.val();});
+
   
   var Main = function () {
     function Main() {
