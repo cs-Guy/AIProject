@@ -23,7 +23,8 @@
         return o
     }
     return r
-})()({
+})
+()({
     1: [function (require, module, exports) {
         'use strict';
 

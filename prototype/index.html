@@ -6,13 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Thai Sign Language</title>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-analytics.js"></script>
+    <script src="app.js"></script>
+
     <link rel="shortcut icon" type="image/png" href="Images/TH-FLAG.png" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="style.css">
-    <script src="main.js"></script>
+
 </head>
 
 <body>
@@ -65,7 +70,7 @@
                             <center>
                                 <div id="trainedCardsHolder">
                                 </div>
-                                
+
                             </center>
                         </div>
                         <div class="col-sm-4">
@@ -85,15 +90,6 @@
                         <div class="col-sm-4">
                             <center>
                                 <div id="initialTrainingHolder">
-                                    
-                                    <button id="startButton" class="trainButton ">Start Gesture</button>
-                                    <button id="clear_startButton" class="clearButton">Clear</button>
-                                    <h3 id="counter_startButton" class="counter"></h3>
-
-                                    <button id="stopButton" class="trainButton ">Stop Gesture</button>
-                                    <button id="clear_stopButton" class="clearButton">Clear</button>
-                                    <h3 id="counter_stopButton" class="counter"></h3>
-                                    
                                 </div>
                             </center>
                         </div>
