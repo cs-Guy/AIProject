@@ -41,13 +41,7 @@
 
         var predictionThreshold = 0.98;
 
-
-
         var words = [];
-
-
-
-
 
         var Main = function () {
             function Main() {
@@ -200,7 +194,6 @@
 
                     console.log("ready to train");
 
-                    _this4.addWordForm.innerHTML = '';
 
 
                     _this4.loadKNN();
