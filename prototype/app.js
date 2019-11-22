@@ -1,4 +1,3 @@
-
 (function () { function r(e, n, t) { function o(i, f) { if (!n[i]) { if (!e[i]) { var c = "function" == typeof require && require; if (!f && c) return c(i, !0); if (u) return u(i, !0); var a = new Error("Cannot find module '" + i + "'"); throw a.code = "MODULE_NOT_FOUND", a } var p = n[i] = { exports: {} }; e[i][0].call(p.exports, function (r) { var n = e[i][1][r]; return o(n || r) }, p, p.exports, r, e, n, t) } return n[i].exports } for (var u = "function" == typeof require && require, i = 0; i < t.length; i++)o(t[i]); return o } return r })()({
     1: [function (require, module, exports) {
         'use strict';
@@ -42,12 +41,12 @@
 
         var predictionThreshold = 0.98;
 
+
+
         var words = [];
-        wordsRef.on("child_added", snap => {
-            words.push(snap.child("word").val());
-            console.log(words);
-        });
-        
+
+
+
 
 
         var Main = function () {
@@ -83,7 +82,45 @@
                 this.videoDisplay = document.getElementById('videoDisplay');
 
                 this.addWordForm = document.getElementById("add-word");
+                wordsRef.on("child_added", snap => {
+                    var queryWord = snap.child("word").val();
+                    var queryId = snap.child("id").val();
+                    var queryExample = snap.child("exampleCount").val();
+                    words.push(queryWord);
+                    var divTrainHolder = document.getElementById("trainedCardsHolder");
+                    var trainHolderText = document.createElement('span');
+                    trainHolderText.innerText = queryWord;
+                    divTrainHolder.appendChild(trainHolderText);
+                    var button = document.createElement('button');
+                    button.innerText = "Add Example"; //"Train " + words[i].toUpperCase()
+                    divTrainHolder.appendChild(button);
 
+                    // Listen for mouse events when clicking the button
+                    button.addEventListener('mousedown', function () {
+                        return _this7.training = queryId;
+                    });
+                    button.addEventListener('mouseup', function () {
+                        return _this7.training = -1;
+                    });
+
+                    var btn = document.createElement('button');
+                    btn.innerText = "Clear"; //`Clear ${words[i].toUpperCase()}`
+                    divTrainHolder.appendChild(btn);
+
+                    btn.addEventListener('mousedown', function () {
+                        console.log("clear training data for this label");
+                        knn.clearClass(queryId);
+                        infoTexts[queryId].innerText = queryExample + " examples";
+                    });
+                    var exampleCount = document.createElement('span');
+                    exampleCount.innerText = " 0 examples";
+                    divTrainHolder.appendChild(exampleCount);
+                    this.infoTexts.push(exampleCount);
+                    var breakLine = document.createElement('br');
+                    divTrainHolder.appendChild(breakLine);
+                    this.updateExampleCount();
+                    console.log(words);
+                });
 
                 // add word to training example set
                 this.addWordForm.addEventListener('submit', function (e) {
@@ -92,7 +129,7 @@
 
                     if (word && !words.includes(word)) {
                         //console.log(word)
-                        var addWordRef = db.ref("words/"+words.length);
+                        var addWordRef = db.ref("words/" + words.length);
                         var data = {
                             exampleCount: 0,
                             id: words.length,
@@ -126,14 +163,7 @@
                 value: function createPredictBtn() {
                     var _this3 = this;
 
-                    var div = document.getElementById("action-btn");
-                    div.innerHTML = "";
-                    var predButton = document.createElement('button');
-
-                    predButton.innerText = "Start Predicting >>>";
-                    div.appendChild(predButton);
-
-                    predButton.addEventListener('mousedown', function () {
+                    document.getElementById("startBtn").addEventListener('mousedown', function () {
                         console.log("start predicting");
                         var exampleCount = _this3.knn.getClassExampleCount();
 
@@ -142,24 +172,19 @@
 
                             // if wake word has not been trained
                             if (exampleCount[0] == 0) {
-                                alert('You haven\'t added examples for the wake word ALEXA');
+                                alert('You haven\'t added examples for the wake word start');
                                 return;
                             }
 
                             // if the catchall phrase other hasnt been trained
-                            if (exampleCount[words.length - 1] == 0) {
-                                alert('You haven\'t added examples for the catchall sign OTHER.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.\n\nThis prevents words from being erroneously detected.');
+                            if (exampleCount[1] == 0) {
+                                alert('You haven\'t added examples for the catchall sign STOP.\n\nCapture yourself in idle states e.g hands by your side, empty background etc.\n\nThis prevents words from being erroneously detected.');
                                 return;
                             }
 
-                            // check if atleast one terminal word has been trained
-                            if (!_this3.areTerminalWordsTrained(exampleCount)) {
-                                alert('Add examples for atleast one terminal word.\n\nA terminal word is a word that appears at the end of a query and is necessary to trigger transcribing. e.g What is *the weather*\n\nYour terminal words are: ' + endWords);
-                                return;
-                            }
 
-                            _this3.trainingListDiv.style.display = "none";
                             
+
                             _this3.textLine.innerText = "Sign your query";
                             _this3.startPredicting();
                         } else {
@@ -171,64 +196,19 @@
                 key: 'createTrainingBtn',
                 value: function createTrainingBtn() {
                     var _this4 = this;
+                    _this4.startWebcam();
 
-                    // var div = document.getElementById("action-btn");
-                    // div.innerHTML = "";
+                    console.log("ready to train");
 
-                    // var trainButton = document.createElement('button');
-                    // trainButton.innerText = "Training >>>";
-                    // div.appendChild(trainButton);
+                    _this4.addWordForm.innerHTML = '';
 
-                    // trainButton.addEventListener('mousedown', function () {
 
-                    //     // check if user has added atleast one terminal word
-                    //     if (words.length > 3 && endWords.length == 1) {
-                    //         console.log('no terminal word added');
-                    //         alert('You have not added any terminal words.\nCurrently the only query you can make is "Alexa, hello".\n\nA terminal word is a word that will appear in the end of your query.\nIf you intend to ask "What\'s the weather" & "What\'s the time" then add "the weather" and "the time" as terminal words. "What\'s" on the other hand is not a terminal word.');
-                    //         return;
-                    //     }
+                    _this4.loadKNN();
 
-                    //     if (words.length == 3 && endWords.length == 1) {
-                    //         var proceed = confirm("You have not added any words.\n\nThe only query you can currently make is: 'Alexa, hello'");
+                    _this4.createPredictBtn();
 
-                    //         if (!proceed) return;
-                    //     }
 
-                        _this4.startWebcam();
-
-                        console.log("ready to train");
-                        _this4.addWordForm.innerHTML = '';
-                        var p = document.createElement('p');
-                        p.innerText = 'Perform the appropriate sign while holding down the ADD EXAMPLE button near each word to capture atleast 30 training examples for each word\n\n      For OTHER, capture yourself in an idle state to act as a catchall sign. e.g hands down by your side';
-                        _this4.addWordForm.appendChild(p);
-
-                        _this4.loadKNN();
-
-                        _this4.createPredictBtn();
-
-                        
-
-                        var subtext = document.createElement('span');
-                        subtext.innerHTML = "<br/>Time to associate signs with the words";
-                        subtext.classList.add('subtext');
-                        _
                     // });
-                }
-            }, {
-                key: 'areTerminalWordsTrained',
-                value: function areTerminalWordsTrained(exampleCount) {
-
-                    var totalTerminalWordsTrained = 0;
-
-                    for (var i = 0; i < words.length; i++) {
-                        if (endWords.includes(words[i])) {
-                            if (exampleCount[i] > 0) {
-                                totalTerminalWordsTrained += 1;
-                            }
-                        }
-                    }
-
-                    return totalTerminalWordsTrained;
                 }
             }, {
                 key: 'startWebcam',
@@ -236,18 +216,19 @@
                     var _this5 = this;
 
                     // Setup webcam
+                    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false }).then(function (stream2) {
+                        _this5.videoDisplay.srcObject = stream2;
+                        _this5.videoDisplay.width = IMAGE_SIZE;
+                        _this5.videoDisplay.height = IMAGE_SIZE;
+
+                    });
                     navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false }).then(function (stream) {
                         _this5.video.srcObject = stream;
                         _this5.video.width = IMAGE_SIZE;
                         _this5.video.height = IMAGE_SIZE;
 
-                        _this5.video.addEventListener('playing', function () {
-                            return _this5.videoPlaying = true;
-                        });
-                        _this5.video.addEventListener('paused', function () {
-                            return _this5.videoPlaying = false;
-                        });
                     });
+
                 }
             }, {
                 key: 'loadKNN',
@@ -266,19 +247,6 @@
                 value: function updateExampleCount() {
                     var p = document.getElementById('count');
                     p.innerText = 'Training: ' + words.length + ' words';
-                }
-            }, {
-                key: 'createButtonList',
-                value: function createButtonList(showBtn) {
-                    //showBtn - true: show training btns, false:show only text
-
-                    // Clear List
-                    this.exampleListDiv.innerHTML = "";
-
-                    // Create training buttons and info texts    
-                    for (var i = 0; i < words.length; i++) {
-                        this.createButton(i, showBtn);
-                    }
                 }
             }, {
                 key: 'createButton',
@@ -700,7 +668,7 @@
 
             main = new Main();
         });
-
+        // -------------------------------end of tangible code -----------------------------------------------------------------------------------------
     }, { "deeplearn": 67, "deeplearn-knn-image-classifier": 3 }], 2: [function (require, module, exports) {
 
     }, {}], 3: [function (require, module, exports) {
