@@ -12,24 +12,68 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-const IMAGE_SIZE = 227;
+var db = firebase.database();
+var wordsRef = db.ref().child("words");
+var imageRef = db.ref().child("images");
 
+const IMAGE_SIZE = 227;
+const knn = null;
+const mobilenetModule = null;
 //Number of Nearest Neighbours for KNN classifier
 const TOPK = 10;
 
 const confidenceThreshold = 0.98
 
 var words = [];
+var video = document.getElementById("videoElement");
+var addWordForm = document.getElementById("add-word");
+var trainCardsHolder = document.getElementById("trainedCardsHolder");
 
+wordsRef.on("child_added", snap => {
+    // get Information of word from database
+    var queryWord = snap.child("word").val();
+    var queryId = snap.child("id").val();
+    var queryExample = snap.child("exampleCount").val();
 
-this.video = document.getElementById("videoElement");
-console.log(video);
+    // add word to words array
+    words.push(queryWord);
+    var trainHolderText = document.createElement('span');
+    trainHolderText.innerText = queryWord;
+    trainCardsHolder.appendChild(trainHolderText);
+    var button = document.createElement('button');
+    button.innerText = "Add Example";
+    trainCardsHolder.appendChild(button);
+
+    // Listen for mouse events when clicking the button, if clicked change training to index of words
+    button.addEventListener('mousedown', function () {
+        addExample(queryId);
+    });
+    
+    // add "Clear Button"
+    var btn = document.createElement('button');
+    btn.innerText = "Clear";
+    trainCardsHolder.appendChild(btn);
+
+    // Listen for mouse events, if clicked clear training
+    btn.addEventListener('mousedown', function () {
+        console.log("clear training data for this label");
+        knn.clearClass(queryId);
+        console.log("clear");
+        // console.log(words);
+    });
+    var exampleCount = document.createElement('span');
+    exampleCount.innerText = queryExample + " examples";
+    trainCardsHolder.appendChild(exampleCount);
+    var breakLine = document.createElement('br');
+    trainCardsHolder.appendChild(breakLine);
+    updateExampleCount();
+});
 
 
 function initClassifier() {
     initWebcam();
-    const knn = knnClassifier.create();
-    const mobilenetModule = mobilenet.load();
+    this.knn = knnClassifier.create();
+    this.mobilenetModule = mobilenet.load();
 
 }
 initClassifier();
@@ -50,7 +94,54 @@ function initWebcam() {
 
 }
 
+this.addWordForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var word = document.getElementById("new-word").value.trim().toLowerCase();
 
+    if (word && !words.includes(word)) {
+        //console.log(word)
+        var addWordRef = db.ref("words/" + words.length);
+        var data = {
+            exampleCount: 0,
+            id: words.length,
+            word: word
+        };
+        addWordRef.set(data);
+
+        _this2.updateExampleCount();
+        //console.log(words)
+
+
+        document.getElementById("new-word").value = '';
+        checkbox.checked = false;
+
+        // console.log(words)
+    } else {
+        alert("Duplicate word or no word entered");
+    }
+    return;
+});
+
+function updateExampleCount() {
+    var p = document.getElementById('count');
+    p.innerText = 'Training: ' + words.length + ' words';
+}
+
+function addExample(i){
+    var image = tf.browser.fromPixels(video);
+    console.log(image);
+    var logits = mobilenetModule.infer(image, 'conv_preds');
+    var send = {
+        id: i,
+        image: logits
+    }
+    imageRef.push(send);
+    knn.addExample(logits, i);
+}
+
+function clearExample(i){
+
+}
 
 function predictClass() {
 

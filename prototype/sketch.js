@@ -74,7 +74,7 @@
                 this.trainingListDiv = document.getElementById("training-list");
                 this.exampleListDiv = document.getElementById("trainedCards");
 
-                this.trainCardsHolder = document.getElementById("trainedCardsHolder");
+                this.
 
                 this.knn = null;
 
