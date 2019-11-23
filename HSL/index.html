@@ -9,8 +9,14 @@
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-analytics.js"></script>
+    <!-- Load TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <!-- Load MobileNet -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    <!-- Load KNN Classifier -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
 
-    <script src="build.js"></script>
+    
 
     <link rel="shortcut icon" type="image/png" href="Images/TH-FLAG.png" />
 
@@ -32,7 +38,7 @@
             </a>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <div id="action-btn" class="nav-link" ></div>
+                    <div id="action-btn" class="nav-link"></div>
                 </li>
             </ul>
         </nav>
@@ -58,11 +64,9 @@
                         <div class="col-sm-4">
                             <center>
                                 <br>
-                                <div id="status">
-                                    <p id="status-text">Status: Not Ready</p>
-                                </div>
                                 <div id="videoholder">
-                                    <video autoplay="true" id="video"></video>
+                                    <video autoplay="true" id="videoElement"></video>
+                                    
                                     <div id="trainingHolder">
                                         <h5 id="add-gesture">Add Word</h5>
                                         <form id="add-word" autocomplete="off">
@@ -76,7 +80,7 @@
                         <div class="col-sm-4">
                             <center>
                                 <br>
-                                
+
                                 <div id="translationHolder">
                                     <!-- translationText is to be overwritten -->
                                     <h3 id="translationText">Start Signing!</h3>
@@ -88,7 +92,7 @@
             </center>
         </div>
     </div>
-
+    <script src="script.js"></script>
 </body>
 
 </html>
