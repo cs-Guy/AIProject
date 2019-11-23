@@ -18,7 +18,7 @@ var imageRef = db.ref().child("images");
 
 const IMAGE_SIZE = 227;
 const knn = null;
-const mobilenetModule = null;
+const model = null;
 //Number of Nearest Neighbours for KNN classifier
 const TOPK = 10;
 
@@ -38,7 +38,7 @@ wordsRef.on("child_added", snap => {
     // add word to words array
     words.push(queryWord);
     var trainHolderText = document.createElement('span');
-    trainHolderText.innerText = queryWord;
+    trainHolderText.innerText = queryWord + " ";
     trainCardsHolder.appendChild(trainHolderText);
     var button = document.createElement('button');
     button.innerText = "Add Example";
@@ -46,7 +46,7 @@ wordsRef.on("child_added", snap => {
 
     // Listen for mouse events when clicking the button, if clicked change training to index of words
     button.addEventListener('mousedown', function () {
-        addExample(queryId);
+        addExample(queryId,queryExample);
     });
     
     // add "Clear Button"
@@ -62,7 +62,8 @@ wordsRef.on("child_added", snap => {
         // console.log(words);
     });
     var exampleCount = document.createElement('span');
-    exampleCount.innerText = queryExample + " examples";
+    exampleCount.id = queryWord;
+    exampleCount.innerText = " "+queryExample + " examples";
     trainCardsHolder.appendChild(exampleCount);
     var breakLine = document.createElement('br');
     trainCardsHolder.appendChild(breakLine);
@@ -70,10 +71,11 @@ wordsRef.on("child_added", snap => {
 });
 
 
+
 function initClassifier() {
     initWebcam();
     this.knn = knnClassifier.create();
-    this.mobilenetModule = mobilenet.load();
+    this.model = mobilenet.load();
 
 }
 initClassifier();
@@ -108,12 +110,9 @@ this.addWordForm.addEventListener('submit', function (e) {
         };
         addWordRef.set(data);
 
-        _this2.updateExampleCount();
         //console.log(words)
 
-
         document.getElementById("new-word").value = '';
-        checkbox.checked = false;
 
         // console.log(words)
     } else {
@@ -127,16 +126,18 @@ function updateExampleCount() {
     p.innerText = 'Training: ' + words.length + ' words';
 }
 
-function addExample(i){
-    var image = tf.browser.fromPixels(video);
-    console.log(image);
-    var logits = mobilenetModule.infer(image, 'conv_preds');
+function addExample(i,j){
+    var image1 = tf.browser.fromPixels(video,1);
     var send = {
         id: i,
-        image: logits
+        image: image1
     }
     imageRef.push(send);
-    knn.addExample(logits, i);
+    var updates = {exampleCount: j+1};
+    var updater = db.ref("words/"+i);
+    updater.update(updates);
+    
+    
 }
 
 function clearExample(i){
