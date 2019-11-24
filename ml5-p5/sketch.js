@@ -36,6 +36,7 @@ wordsRef.on("child_added", snap => {
     var queryWord = snap.child("word").val();
     // add word to words array
     words.push(queryWord);
+    console.log(words);
     var queryText = document.createElement('span');
     queryText.innerText = queryWord;
     cards.appendChild(queryText);
@@ -44,6 +45,7 @@ wordsRef.on("child_added", snap => {
     cards.appendChild(button);
     button.addEventListener('click', function () {
         const logits = features.infer(video);
+        console.log(queryWord);
         knn.addExample(logits, queryWord);
         updateCount(queryWord, exampleCount);
     });
@@ -51,6 +53,7 @@ wordsRef.on("child_added", snap => {
     btn.innerText = "Clear";
     btn.addEventListener('mousedown', function () {
         knn.clearLabel(queryWord);
+        console.log("clear " + queryWord);
         updateCount(queryWord, exampleCount);
     });
     cards.appendChild(btn);
@@ -104,28 +107,47 @@ function goClassify() {
         if (error) {
             console.log(error);
         } else {
-            console.log(result);
-            if (words[result.label] != "start" && result.confidences[result.label] > confidenceThreshold && words[result.label] != previousWord && !finishSentence) {
+            var temp = Object.values(result.confidences);
+            console.log(temp);
+            var index = indexOfMax(temp);
+            console.log(words[index]);
+            if (words[index] != "start" && temp[index] > confidenceThreshold && words[index] != previousWord && !finishSentence) {
 
-                if (previousWord != words[result.label] && words[result.label] == "stop") {
+                if (previousWord != words[index] && words[index] == "stop") {
                     finishSentence = true;
-                } else{
-                    labelP.innerHTML += words[result.label];
-                    talk.speak(words[result.label]);
+                } else {
+                    labelP.innerHTML += words[index];
+                    talk.speak(words[index]);
                 }
-                previousWord = words[result.label];
+                previousWord = words[index];
             } else {
-                if (words[result.label] == "start") {
+                if (words[index] == "start") {
                     clearPara();
                     finishSentence = false;
-                    previousWord = words[result.label];
+                    previousWord = words[index];
                 }
             }
             goClassify();
         }
     });
 }
+function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
 
+    var max = arr[0];
+    var maxIndex = 0;
+
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+
+    return maxIndex;
+}
 function clearPara() {
     labelP.innerHTML = "";
 }
