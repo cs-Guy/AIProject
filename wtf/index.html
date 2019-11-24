@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>image_classification</title>
+	<!-- firebase -->
+	<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-analytics.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
+	
+	<script src="https://unpkg.com/ml5@0.1.1/dist/ml5.min.js"></script>
+
+	<!-- Bootstrap/jquery -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="#">
+			<img src="Images/TH-FLAG.png" alt="logo" style="width:40px;">
+		</a>
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<div id="action-btn" class="nav-link"></div>
+			</li>
+		</ul>
+	</nav>
+
+	<center>
+		<div id="trainingpage">
+			<div class="row">
+				<div class="col-sm-4">
+					<center>
+						<br>
+						<p id="count">Training: 0 words</p>
+						<!-- trainedCardsHolder holds the words and buttons for adding example and clearing -->
+						<div id="trainedCardsHolder" style="overflow-y:auto; height: 500px;">
+						</div>
+
+					</center>
+				</div>
+				<div class="col-sm-4">
+					<center>
+						<br>
+						<div id="videoholder">
+							<div id="showVideo">
+
+							</div>
+
+							<div id="trainingHolder">
+								<h5 id="add-gesture">Add Word</h5>
+								<form id="add-word" autocomplete="off">
+									<input type="text" id="new-word" placeholder="New Gesture Title">
+									<input type="submit" id="submit-word" value="Add Word &#9658;">
+								</form>
+								<br>
+								<button onclick="saveModel()">save model</button>
+								<button id="train">Train</button>
+							</div>
+						</div>
+					</center>
+				</div>
+				<div class="col-sm-4">
+					<center>
+						<br>
+
+						<div id="translationHolder">
+							<!-- translationText is to be overwritten -->
+
+						</div>
+					</center>
+				</div>
+			</div>
+		</div>
+	</center>
+
+	<script src="sketch.js"></script>
+</body>
+
+</html>

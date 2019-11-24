@@ -23,6 +23,7 @@ let neighbour = 10;
 let confidenceThreshold = .9;
 let previousWord;
 let finishSentence = true;
+var talk = new p5.Speech();
 let labelP;
 let previous;
 var textHolder = document.getElementById("translationHolder");
@@ -84,36 +85,37 @@ addWordForm.addEventListener('submit', function (e) {
 
 function setup() {
     //canvas = createCanvas(320, 240);
-    canvas = createCanvas(476, 357);
+    canvas = createCanvas(340, 240);
     canvas.parent('showVideo');
     video = createCapture(VIDEO);
     //video.size(320, 240);
-    video.size(476, 357);
+    video.size(340, 240);
     video.hide();
     features = ml5.featureExtractor('MobileNet', modelReady);
     labelP = document.createElement("p");
-    labelP.style.fontSize ='20pt';
+    labelP.style.fontSize = '20pt';
     labelP.innerHTML = "Please Sign your Language"
     textHolder.appendChild(labelP);
 }
 
 function goClassify() {
     const logits = features.infer(video);
-    knn.classify(logits,10, function (error, result) {
+    knn.classify(logits, 10, function (error, result) {
         if (error) {
             console.log(error);
         } else {
-            console.log(words[result.label]);
-            if(words[result.label] != "start" && result.confidences[result.label] > confidenceThreshold && words[result.label] != previousWord && !finishSentence){
+            console.log(result);
+            if (words[result.label] != "start" && result.confidences[result.label] > confidenceThreshold && words[result.label] != previousWord && !finishSentence) {
 
-                if(words[result.label] == "stop"){
+                if (previousWord != words[result.label] && words[result.label] == "stop") {
                     finishSentence = true;
-                }else{
+                } else{
                     labelP.innerHTML += words[result.label];
+                    talk.speak(words[result.label]);
                 }
                 previousWord = words[result.label];
-            }else{
-                if(words[result.label] == "start"){
+            } else {
+                if (words[result.label] == "start") {
                     clearPara();
                     finishSentence = false;
                     previousWord = words[result.label];
@@ -124,14 +126,14 @@ function goClassify() {
     });
 }
 
-function clearPara(){
+function clearPara() {
     labelP.innerHTML = "";
 }
 function updateCount(n, m) {
     const counts = knn.getCountByLabel();
-    
+
     m.innerHTML = (counts[n] || 0) + " exampleCount";
-    
+
 }
 
 
@@ -142,7 +144,7 @@ function modelReady() {
         console.log("KNN Data Loaded");
         goClassify();
 
-    }).catch(function(){
+    }).catch(function () {
         console.log("cannot find file");
         goClassify();
     });
@@ -154,7 +156,7 @@ function draw() {
 
 }
 
-function saveModel(){
+function saveModel() {
     knn.save("model.json");
 }
 

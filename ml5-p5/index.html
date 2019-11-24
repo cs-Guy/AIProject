@@ -14,6 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.min.js"></script>
+  <script src="libaries/p5.speech.js"></script>
   <!-- ml5 -->
   <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script>
   <!-- Bootstrap/AJAX -->
@@ -35,53 +36,45 @@
     </ul>
   </nav>
 
-  <center>
-    <div id="trainingpage">
-      <div class="row">
-        <div class="col-sm-4">
-          <center>
-            <br>
-            <p id="count">Training: 0 words</p>
-            <!-- trainedCardsHolder holds the words and buttons for adding example and clearing -->
-            <div id="trainedCardsHolder" style="overflow-y:auto; height: 100%;">
+
+  <div id="trainingpage">
+    <div class="row" style="width: 100%;">
+      <div class="col-sm-4">
+        <center>
+          <br>
+          <p id="count">Training: 0 words</p>
+          <!-- trainedCardsHolder holds the words and buttons for adding example and clearing -->
+          <div id="trainedCardsHolder" style="overflow-y:auto; height: 500px;"></div>
+        </center>
+      </div>
+      <div class="col-sm-4">
+        <center>
+          <br>
+          <div id="videoholder">
+            <div id="showVideo"></div>
+            <div id="trainingHolder">
+              <h5 id="add-gesture">Add Word</h5>
+              <form id="add-word" autocomplete="off">
+                <input type="text" id="new-word" placeholder="New Gesture Title">
+                <input type="submit" id="submit-word" value="Add Word &#9658;">
+              </form>
+              <br>
+              <button onclick="saveModel()">save model</button>
             </div>
-
-          </center>
-        </div>
-        <div class="col-sm-4">
-          <center>
-            <br>
-            <div id="videoholder">
-              <div id="showVideo">
-
-              </div>
-
-              <div id="trainingHolder">
-                <h5 id="add-gesture">Add Word</h5>
-                <form id="add-word" autocomplete="off">
-                  <input type="text" id="new-word" placeholder="New Gesture Title">
-                  <input type="submit" id="submit-word" value="Add Word &#9658;">
-                </form>
-                <br>
-                <button onclick="saveModel()">save model</button>
-                
-              </div>
-            </div>
-          </center>
-        </div>
-        <div class="col-sm-4">
-          <center>
-            <br>
-
-            <div id="translationHolder">
-              <!-- translationText is to be overwritten -->
-              
-            </div>
-          </center>
-        </div>
+          </div>
+        </center>
+      </div>
+      <div class="col-sm-4">
+        <center>
+          <br>
+          <div id="translationHolder">
+            <!-- translationText is to be overwritten -->
+          </div>
+        </center>
       </div>
     </div>
-  </center>
+  </div>
+
 
   <script src="sketch.js"></script>
 </body>
