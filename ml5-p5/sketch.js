@@ -22,7 +22,7 @@ let knn;
 let neighbour = 10;
 let confidenceThreshold = .9;
 let previousWord;
-let finishSentence = false;
+let finishSentence = true;
 let labelP;
 let previous;
 var textHolder = document.getElementById("translationHolder");
@@ -103,17 +103,20 @@ function goClassify() {
         if (error) {
             console.log(error);
         } else {
-            console.log(result);
+            console.log(words[result.label]);
             if(words[result.label] != "start" && result.confidences[result.label] > confidenceThreshold && words[result.label] != previousWord && !finishSentence){
+
                 if(words[result.label] == "stop"){
                     finishSentence = true;
                 }else{
                     labelP.innerHTML += words[result.label];
                 }
+                previousWord = words[result.label];
             }else{
                 if(words[result.label] == "start"){
                     clearPara();
                     finishSentence = false;
+                    previousWord = words[result.label];
                 }
             }
             goClassify();
