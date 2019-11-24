@@ -16,7 +16,7 @@
     <!-- Load KNN Classifier -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
 
-    
+
 
     <link rel="shortcut icon" type="image/png" href="Images/TH-FLAG.png" />
 
@@ -32,64 +32,14 @@
 <body>
     <div>
         <!--Navigation bar-->
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <a class="navbar-brand" href="#">
-                <img src="Images/TH-FLAG.png" alt="logo" style="width:40px;">
-            </a>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <div id="action-btn" class="nav-link"></div>
-                </li>
-            </ul>
-        </nav>
+
 
 
         <!--Content-->
         <div id="content">
 
             <!--Training/Dev Page-->
-            <center>
-                <div id="trainingpage">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <center>
-                                <br>
-                                <p id="count">Training: 0 words</p>
-                                <!-- trainedCardsHolder holds the words and buttons for adding example and clearing -->
-                                <div id="trainedCardsHolder">
-                                </div>
-
-                            </center>
-                        </div>
-                        <div class="col-sm-4">
-                            <center>
-                                <br>
-                                <div id="videoholder">
-                                    <video autoplay="true" id="videoElement"></video>
-                                    
-                                    <div id="trainingHolder">
-                                        <h5 id="add-gesture">Add Word</h5>
-                                        <form id="add-word" autocomplete="off">
-                                            <input type="text" id="new-word" placeholder="New Gesture Title">
-                                            <input type="submit" id="submit-word" value="Add Word &#9658;">
-                                        </form>
-                                    </div>
-                                </div>
-                            </center>
-                        </div>
-                        <div class="col-sm-4">
-                            <center>
-                                <br>
-
-                                <div id="translationHolder">
-                                    <!-- translationText is to be overwritten -->
-                                    <h3 id="translationText">Start Signing!</h3>
-                                </div>
-                            </center>
-                        </div>
-                    </div>
-                </div>
-            </center>
+            
         </div>
     </div>
     <script src="script.js"></script>

@@ -1,16 +1,5 @@
 //Init firebase
-var firebaseConfig = {
-    apiKey: "AIzaSyCKJGgp8tahEwT2LhwwG0VZKmNyp4POHyY",
-    authDomain: "ai-project-a2ecb.firebaseapp.com",
-    databaseURL: "https://ai-project-a2ecb.firebaseio.com",
-    projectId: "ai-project-a2ecb",
-    storageBucket: "ai-project-a2ecb.appspot.com",
-    messagingSenderId: "112172321237",
-    appId: "1:112172321237:web:cf3f2fcb8b270d021d955c",
-    measurementId: "G-B2Q8DHJ4XJ"
-};
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+
 
 var db = firebase.database();
 var wordsRef = db.ref().child("words");
