@@ -39,6 +39,8 @@ wordsRef.on("child_added", snap => {
     var queryWord = snap.child("word").val();
     // add word to words array
     words.push(queryWord);
+    var exampleCount = document.createElement('span');
+    exampleCount.id = "exampleCount" + queryWord;
     updateWords();
     console.log(words);
     var queryText = document.createElement('span');
@@ -49,8 +51,8 @@ wordsRef.on("child_added", snap => {
     cards.appendChild(button);
     button.addEventListener('click', function () {
         const logits = features.infer(video);
-        console.log(queryWord);
         knn.addExample(logits, queryWord);
+        console.log("added "+queryWord);
         updateCount(queryWord, exampleCount);
     });
     var btn = document.createElement('button');
@@ -61,8 +63,7 @@ wordsRef.on("child_added", snap => {
         updateCount(queryWord, exampleCount);
     });
     cards.appendChild(btn);
-    var exampleCount = document.createElement('span');
-    exampleCount.id = "exampleCount" + queryWord;
+    
     updateCount(queryWord, exampleCount);
     cards.appendChild(exampleCount);
     var breakLine = document.createElement('br');
@@ -114,9 +115,11 @@ function goClassify() {
         if (error) {
             console.log(error);
         } else {
+            console.log(result.label);
             var temp = Object.values(result.confidences);
             console.log(temp);
-            var index = indexOfMax(temp);
+            var index = temp.indexOf(Math.max(...temp));
+            console.log(index);
             console.log(words[index]);
             
             if (words[index] != "start" && temp[index] > confidenceThreshold && words[index] != previousWord && !finishSentence) {
