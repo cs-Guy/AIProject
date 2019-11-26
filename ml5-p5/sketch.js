@@ -31,6 +31,7 @@ var words = [];
 var cards = document.getElementById("trainedCardsHolder");
 var addWordForm = document.getElementById("add-word");
 
+//on word added
 wordsRef.on("child_added", snap => {
     // get Information of word from database
     var queryWord = snap.child("word").val();
@@ -67,6 +68,7 @@ wordsRef.on("child_added", snap => {
 
 });
 
+//add new word to firebase
 addWordForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var word = document.getElementById("new-word").value.trim().toLowerCase();
@@ -94,7 +96,9 @@ function setup() {
     //video.size(320, 240);
     video.size(340, 240);
     video.hide();
+    //load featureExtractor from mobilenet
     features = ml5.featureExtractor('MobileNet', modelReady);
+    //display word
     labelP = document.createElement("p");
     labelP.style.fontSize = '20pt';
     labelP.innerHTML = "Please Sign your Language"
@@ -111,6 +115,7 @@ function goClassify() {
             console.log(temp);
             var index = indexOfMax(temp);
             console.log(words[index]);
+            
             if (words[index] != "start" && temp[index] > confidenceThreshold && words[index] != previousWord && !finishSentence) {
 
                 if (previousWord != words[index] && words[index] == "stop") {
@@ -131,6 +136,8 @@ function goClassify() {
         }
     });
 }
+
+//get highest value from array
 function indexOfMax(arr) {
     if (arr.length === 0) {
         return -1;
@@ -148,9 +155,13 @@ function indexOfMax(arr) {
 
     return maxIndex;
 }
+
+//clear translation display
 function clearPara() {
     labelP.innerHTML = "";
 }
+
+//check if word has examples added to it and update example count
 function updateCount(n, m) {
     const counts = knn.getCountByLabel();
 
@@ -158,7 +169,7 @@ function updateCount(n, m) {
 
 }
 
-
+//callback function from load mobilenet and load model to ml5 knn classifier
 function modelReady() {
     console.log('MobileNet loaded!');
     knn = ml5.KNNClassifier();
@@ -175,10 +186,11 @@ function modelReady() {
 
 function draw() {
     image(video, 0, 0);
-
 }
 
+
 function saveModel() {
+    //save trained model
     knn.save("model.json");
 }
 
