@@ -184,7 +184,8 @@ function modelReady() {
     knn = ml5.KNNClassifier();
     knn.load("model.json").then(function () {
         console.log("KNN Data Loaded");
-        goClassify();
+        setTimeout(goClassify(),500);
+        
 
     }).catch(function () {
         console.log("cannot find file");
