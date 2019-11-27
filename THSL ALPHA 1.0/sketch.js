@@ -68,8 +68,6 @@ wordsRef.on("child_added", snap => {
     cards.appendChild(exampleCount);
     var breakLine = document.createElement('br');
     cards.appendChild(breakLine);
-
-
 });
 
 //add new word to firebase
